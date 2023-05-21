@@ -1,0 +1,90 @@
+# DDL - Create
+use store;
+create database store;
+
+create table countries(
+    code int primary key ,
+    name varchar(20) unique,
+    continent_name varchar(20) not null
+);
+
+create table users(
+    id int primary key ,
+    full_name varchar(20),
+    email varchar(20) unique ,
+    gender char(1) check ( gender = 'm' or gender = 'f' ),
+    date_of_birth varchar(15),
+    created_at datetime default current_timestamp ,
+    country_code int,
+    foreign key (country_code) references countries(code)
+);
+
+create table orders(
+    id int primary key ,
+    user_id int,
+    status varchar(6) check ( status = 'start' or status = 'finish' ),
+    created_at datetime default current_timestamp ,
+    foreign key (user_id) references users(id)
+);
+
+create table product(
+    id int primary key ,
+    name varchar(10) not null ,
+    price int default 0,
+    status varchar(10) check ( status = 'valid' or status = 'expired' ),
+    created_at datetime default current_timestamp
+);
+
+create table order_product(
+    order_id int,
+    product_id int,
+    quantity int,
+    foreign key (order_id) references orders(id),
+    foreign key (product_id) references product(id)
+);
+
+#_______________________________________
+
+# DML - Insert
+
+#Add to countries table
+insert into countries values(1,	'USA',	'North America');
+insert into countries values (2, 'Saudi Arabia', 'Asia');
+
+#Add to users table
+insert into users values(1, 'John Smith', 'john@gmail.com', 'm', '1990-05-15', '2023-05-20 12:34', 1);
+insert into users values(2, 'Mohammed Alajaji', 'mohammed@example.com', 'm', '1997-11-21', '2023-05-21 14:26', 1);
+
+#Add to orders table
+insert into orders values(1, 1, 'start', '2023-05-20 15:00');
+insert into orders values (2, 2, 'finish', '2023-05-21 20:32');
+
+#Add to product table
+insert into product values (1, 'Laptop', 1000, 'valid', '2023-05-20 09:00');
+insert into product values (2, 'Phone', 800, 'valid', '2023-05-21 10:30')
+
+#Add to order_product table
+insert into order_product values (1, 1, 2);
+insert into order_product values (2, 2, 3);
+
+# DML - Update
+update countries set name = 'Canada' where code = 1;
+
+# DML - Delete
+delete from order_product where product_id = 1;
+delete from product where id = 1;
+
+# DQL - Select
+select * from countries;
+select * from users;
+select * from orders;
+select * from product;
+select * from order_product;
+
+
+
+
+
+
+
+
